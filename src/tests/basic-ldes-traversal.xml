@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testcase id="BasicLdesTraversalTestCase" xmlns="http://www.gitb.com/tdl/v1/"
+  xmlns:gitb="http://www.gitb.com/core/v1/">
+  <metadata>
+    <gitb:name>Basic LDES Traversal</gitb:name>
+    <gitb:version>1.0</gitb:version>
+    <gitb:description>Test case to verify a collection of LDES pages and the structure.</gitb:description>
+  </metadata>
+  <actors>
+    <gitb:actor id="Client" />
+    <gitb:actor id="Publisher" role="SUT" />
+  </actors>
+  <imports>
+    <artifact from="TreeValidationSuite" type="binary" encoding="UTF-8" name="rootNodeTtl">resources/shapes/tree-root-node-shapes.ttl</artifact>
+    <artifact from="TreeValidationSuite" type="binary" encoding="UTF-8" name="subsequentTtl">resources/shapes/tree-subsequent-node-shapes.ttl</artifact>
+    <artifact from="TreeValidationSuite" type="binary" encoding="UTF-8" name="structureTtl">resources/shapes/tree-structure-shapes.ttl</artifact>
+    <artifact type="binary" encoding="UTF-8" name="ldesTtl">resources/shapes/ldes-shapes.ttl</artifact>
+  </imports>
+  <variables>
+    <var name="url" type="string" />
+    <var name="turtleContentType" type="string" />
+    <var name="rootNodeShapes" type="map" />
+    <var name="subsequentShapes" type="map" />
+    <var name="structureShapes" type="map" />
+    <var name="ldesShapes" type="map" />
+    <var name="rootShapes" type="list[map]" />
+    <var name="nodeShapes" type="list[map]" />
+    <var name="treeShapes" type="list[map]" />
+  </variables>
+  <steps>
+    <assign to="url" source="$Publisher{treeRootNodeUrl}"/>
+    <assign to="turtleContentType">"text/turtle"</assign>
+    
+    <assign to="rootNodeShapes{content}">$rootNodeTtl</assign>
+    <assign to="rootNodeShapes{contentType}">$turtleContentType</assign>
+    <assign to="subsequentShapes{content}">$subsequentTtl</assign>
+    <assign to="subsequentShapes{contentType}">$turtleContentType</assign>
+    <assign to="structureShapes{content}">$structureTtl</assign>
+    <assign to="structureShapes{contentType}">$turtleContentType</assign>
+    <assign to="ldesShapes{content}">$ldesTtl</assign>
+    <assign to="ldesShapes{contentType}">$turtleContentType</assign>
+    
+    <assign to="rootShapes" append="true">$rootNodeShapes</assign>
+    <assign to="rootShapes" append="true">$ldesShapes</assign>
+    <assign to="nodeShapes" append="true">$subsequentShapes</assign>
+    <assign to="nodeShapes" append="true">$ldesShapes</assign>
+    <assign to="treeShapes" append="true">$structureShapes</assign>
+
+    <call path="scriptlets/process-ldes-structure.xml">
+      <input name="url">$url</input>
+      <input name="rootShapes">$rootShapes</input>
+      <input name="nodeShapes">$nodeShapes</input>
+      <input name="treeShapes">$treeShapes</input>
+      <input name="maxProcessedCount">$Publisher{treeMaxNodeCount}</input>
+    </call>
+  </steps>
+  <output>
+    <success>
+      <default>"Basic LDES traversal test session completed successfully."</default>
+    </success>
+    <failure>
+      <default>"The test session resulted in a failure. Please check the validation reports and apply required corrections."</default>
+    </failure>
+  </output>
+</testcase>

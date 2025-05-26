@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite id="LdesValidationSuite" xmlns="http://www.gitb.com/tdl/v1/" xmlns:gitb="http://www.gitb.com/core/v1/">
+  <metadata>
+    <gitb:name>LDES specification validation</gitb:name>
+    <gitb:version>1.0</gitb:version>
+    <gitb:description>A test suite to validate an API according to LDES specification</gitb:description>
+  </metadata>
+  <actors>
+    <gitb:actor id="Publisher">
+      <gitb:name>Data Publisher</gitb:name>
+      <gitb:desc>A data provider publishing an LDES collection</gitb:desc>
+      <gitb:endpoint name="config">
+        <gitb:config name="treeRootNodeUrl" label="LDES root node" desc="Please provide the entry point (URL) to check for LDES compliance (LDES root node URL)"/>
+        <gitb:config name="treeMaxNodeCount" defaultValue="10" label="Maximum LDES nodes" desc="The maximum number of LDES nodes to process when validating conformance. This limits how many nodes are verified in case of a large LDES. Set to 0 to verify all available LDES nodes. WARNING: setting this value to zero (0) may result in an ever running test for infinite collections." />
+      </gitb:endpoint>
+    </gitb:actor>
+    <gitb:actor id="Client">
+      <gitb:name>Data Client</gitb:name>
+      <gitb:desc>A data client retrieving an LDES collection</gitb:desc>
+    </gitb:actor>
+  </actors>
+  <testcase id="BasicLdesTraversalTestCase" />
+</testsuite>

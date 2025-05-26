@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scriptlet id="processLdesRootNode" xmlns="http://www.gitb.com/tdl/v1/">
+  <params>
+    <var name="url" type="string" />
+    <var name="nodeShapes" type="list[map]" />
+    <var name="nodesToProcess" type="list[string]" />
+    <var name="memberShapes" type="list[map]" />
+  </params>
+  <variables>
+    <var name="nodeContent" type="string" />
+    <var name="contentType" type="string" />
+    <var name="shapes" type="map" />
+  </variables>
+  <steps>
+    <!-- Process TREE root node -->
+    <call id="processNode" path="scriptlets/process-tree-node.xml" from="TreeValidationSuite">
+      <input name="url">$url</input>
+      <input name="nodeShapes">$nodeShapes</input>
+      <input name="nodesToProcess">$nodesToProcess</input>
+      <input name="memberShapes">$memberShapes</input>
+    </call>
+    <assign to="nodeContent">$processNode{nodeContent}</assign>
+    <assign to="contentType">$processNode{contentType}</assign>
+    <assign to="memberShapes">$processNode{memberShapes}</assign>
+
+    <!-- Extract additional member shapes (if available) -->
+    <call id="extractLdesShapes" path="scriptlets/extract-ldes-shapes.xml">
+      <input name="nodeContent">$nodeContent</input>
+      <input name="contentType">$contentType</input>
+    </call>
+    <if hidden="true">
+      <cond>$extractLdesShapes{shapes}</cond>
+      <then>
+        <assign to="shapes{content}">$extractLdesShapes{shapes}</assign>
+        <assign to="shapes{contentType}">$contentType</assign>
+        <assign to="memberShapes" append="true">$shapes</assign>
+      </then>
+    </if>
+  </steps>
+  <output name="nodesToProcess">$processNode{nodesToProcess}</output>
+  <output name="nodeContent" />
+  <output name="contentType" />
+  <output name="treeNode">$processNode{treeNode}</output>
+  <output name="memberShapes" />
+</scriptlet>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scriptlet id="processLdesStructure" xmlns="http://www.gitb.com/tdl/v1/">
+  <!-- Processes a TREE structure given a starting point and the shapes to validate against -->
+  <params>
+    <var name="url" type="string" />
+    <var name="rootShapes" type="list[map]" />
+    <var name="nodeShapes" type="list[map]" />
+    <var name="treeShapes" type="list[map]" />
+    <var name="maxProcessedCount" type="number" />
+  </params>
+  <variables>
+    <var name="nodesToProcess" type="list[string]" />
+    <var name="processedNodes" type="list[string]" />
+    <var name="memberShapes" type="list[map]" />
+    <var name="treeNodes" type="list[string]" />
+    <var name="contentTypes" type="list[string]" />
+    <var name="done" type="boolean" />
+  </variables>
+  <steps>
+    <call id="processNode" path="scriptlets/process-ldes-root-node.xml">
+      <input name="url">$url</input>
+      <input name="nodeShapes">$rootShapes</input>
+      <input name="nodesToProcess">$nodesToProcess</input>
+      <input name="memberShapes">$memberShapes</input>
+    </call>
+    <assign to="nodesToProcess">$processNode{nodesToProcess}</assign>
+    <assign to="treeNodes" append="true">$processNode{treeNode}</assign>
+    <assign to="contentTypes" append="true">$processNode{contentType}</assign>
+    <assign to="memberShapes">$processNode{memberShapes}</assign>
+    <assign to="processedNodes" append="true">$url</assign>
+
+    <assign to="done" type="boolean">false()</assign>
+    <while desc="Process other nodes">
+      <cond>not($done)</cond>
+      <do>
+        <call id="getNextNode" path="scriptlets/get-next-node.xml" from="TreeValidationSuite">
+          <input name="processedNodes">$processedNodes</input>
+          <input name="nodesToProcess">$nodesToProcess</input>
+          <input name="maxProcessedCount">$maxProcessedCount</input>
+        </call>
+        <assign to="nodesToProcess">$getNextNode{nodesToProcess}</assign>
+        <assign to="url">$getNextNode{url}</assign>
+        <assign to="done">$getNextNode{done}</assign>
+
+        <if hidden="true">
+          <cond>not($done)</cond>
+          <then hidden="false">
+            <call id="processNode" path="scriptlets/process-tree-node.xml"
+              from="TreeValidationSuite">
+              <input name="url">$url</input>
+              <input name="nodeShapes">$nodeShapes</input>
+              <input name="nodesToProcess">$nodesToProcess</input>
+              <input name="memberShapes">$memberShapes</input>
+            </call>
+            <assign to="processedNodes" append="true">$url</assign>
+            <assign to="nodesToProcess">$processNode{nodesToProcess}</assign>
+            <assign to="treeNodes" append="true">$processNode{treeNode}</assign>
+            <assign to="contentTypes" append="true">$processNode{contentType}</assign>
+          </then>
+        </if>
+      </do>
+    </while>
+
+    <call id="validateTree" path="scriptlets/validate-tree.xml" from="TreeValidationSuite">
+      <input name="treeNodes">$treeNodes</input>
+      <input name="contentTypes">$contentTypes</input>
+      <input name="treeShapes">$treeShapes</input>
+    </call>
+  </steps>
+</scriptlet>

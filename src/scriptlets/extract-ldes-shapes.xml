@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scriptlet id="extractLdesShapes" xmlns="http://www.gitb.com/tdl/v1/">
+  <imports>
+    <artifact type="binary" encoding="UTF-8" name="query">resources/queries/with-ldes-shapes.rq</artifact>
+  </imports>
+  <params>
+    <var name="nodeContent" type="string" />
+    <var name="contentType" type="string" />
+  </params>
+  <steps>
+    <process output="shapes" handler="RdfUtils" operation="construct">
+      <input name="model">$nodeContent</input>
+      <input name="inputContentType">$contentType</input>
+      <input name="query">$query</input>
+    </process>
+  </steps>
+  <output name="shapes"/>
+</scriptlet>
