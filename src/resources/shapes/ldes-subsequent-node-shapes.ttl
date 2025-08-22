@@ -1,0 +1,182 @@
+PREFIX ldes: <https://w3id.org/ldes#>
+PREFIX owl:  <http://www.w3.org/2002/07/owl#>
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX sh:   <http://www.w3.org/ns/shacl#>
+PREFIX tree: <https://w3id.org/tree#>
+PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>
+
+ldes:RetentionPolicyInvalidShape
+        rdf:type        sh:PropertyShape;
+        sh:description  "Links together any HTTP response with a view description on which things like retention policies, contact information of a server, etc. can be found.";
+        sh:maxCount     1;
+        sh:message      "LR2.8 - a root node SHOULD contain one `ldes:retentionPolicy`, preferably on the root node, alternatively on the root node's `tree:viewDescription`";
+        sh:name         "Node LDES retention policy";
+        sh:nodeKind     sh:BlankNodeOrIRI;
+        sh:path         ( [ sh:zeroOrOnePath  tree:viewDescription ]
+                          ldes:retentionPolicy
+                        ) .
+
+ldes:EventStreamMemberNodeKindShape
+        rdf:type        sh:PropertyShape;
+        sh:description  "Links to the collection’s items that are the sh:targetNodes of the SHACL shape defined with tree:shape";
+        sh:message      "LR2.9 - an event stream MUST refer using its tree:member property to a member's focus node, which MUST be an IRI";
+        sh:name         "TREE member";
+        sh:nodeKind     sh:IRI;
+        sh:path         tree:member .
+
+tree:CollectionMemberNodeKindShape
+        sh:deactivated  true .
+
+ldes:EventStreamShapeRecommendedShape
+        rdf:type        sh:PropertyShape;
+        sh:description  "The SHACL shape the members of the collection adhere to";
+        sh:message      "LR2.7 - an event stream SHOULD refer using its tree:shape property to a shape defining its members";
+        sh:minCount     1;
+        sh:name         "TREE (shacl) shape";
+        sh:path         tree:shape;
+        sh:severity     sh:Warning .
+
+tree:CollectionShapeSuggestedShape
+        sh:deactivated  true .
+
+ldes:EventStreamVersionSequencePathLimitedShape
+        rdf:type        sh:PropertyShape;
+        sh:description  "The alternative path to the IRI in each member that defines the order of the versions of the same entity";
+        sh:maxCount     1;
+        sh:message      "LR2.6 - an event stream MUST NOT include multiple ldes:versionSequencePath properties";
+        sh:name         "LDES versionSequencePath";
+        sh:path         ldes:versionSequencePath;
+        sh:severity     sh:Violation .
+
+ldes:EventStreamVersionSequencePathSuggestedShape
+        rdf:type        sh:PropertyShape;
+        sh:description  "The alternative path to the IRI in each member that defines the order of the versions of the same entity";
+        sh:message      "LR2.6 - an event stream MAY contain a ldes:versionSequencePath to indicate the relative order of entities with the same ldes:versionTimestampPath";
+        sh:minCount     1;
+        sh:name         "LDES versionSequencePath";
+        sh:path         ldes:versionSequencePath;
+        sh:severity     sh:Info .
+
+ldes:EventStreamVersionTimestampPathLimitedShape
+        rdf:type        sh:PropertyShape;
+        sh:description  "The alternative path to the IRI in each member that defines the order of the versions of the same entity";
+        sh:maxCount     1;
+        sh:message      "LR2.5 - an event stream MUST NOT include multiple ldes:versionTimestampPath properties";
+        sh:name         "LDES versionTimestampPath";
+        sh:path         ldes:versionTimestampPath;
+        sh:severity     sh:Violation .
+
+ldes:EventStreamVersionTimestampPathSuggestedShape
+        rdf:type        sh:PropertyShape;
+        sh:description  "The alternative path to the IRI in each member that defines the order of the versions of the same entity";
+        sh:message      "LR2.5 - an event stream MAY contain a ldes:versionTimestampPath to specify an alternate property that defines the order of the versions of the same entity";
+        sh:minCount     1;
+        sh:name         "LDES versionTimestampPath";
+        sh:path         ldes:versionTimestampPath;
+        sh:severity     sh:Info .
+
+ldes:EventStreamVersionOfPathLimitedShape
+        rdf:type        sh:PropertyShape;
+        sh:description  "The path to the IRI in each member that defines the entity of which this member is a version";
+        sh:maxCount     1;
+        sh:message      "LR2.4 - an event stream MUST NOT include multiple ldes:versionOfPath properties";
+        sh:name         "LDES versionOfPath";
+        sh:path         ldes:versionOfPath;
+        sh:severity     sh:Violation .
+
+ldes:EventStreamVersionOfPathSuggestedShape
+        rdf:type        sh:PropertyShape;
+        sh:description  "The path to the IRI in each member that defines the entity of which this member is a version";
+        sh:message      "LR2.4 - an event stream SHOULD include a ldes:versionOfPath property to specify the entity for which the member is a version of";
+        sh:minCount     1;
+        sh:name         "LDES versionOfPath";
+        sh:path         ldes:versionOfPath;
+        sh:severity     sh:Warning .
+
+ldes:EventStreamSequencePathLimitedShape
+        rdf:type        sh:PropertyShape;
+        sh:description  "The path to the IRI in each member that defines the absolute or relative sequence of ingestion";
+        sh:maxCount     1;
+        sh:message      "LR2.3 - an event stream MUST NOT include multiple ldes:sequencePath properties";
+        sh:name         "LDES sequencePath";
+        sh:path         ldes:sequencePath;
+        sh:severity     sh:Violation .
+
+ldes:EventStreamSequencePathSuggestedShape
+        rdf:type        sh:PropertyShape;
+        sh:description  "The path to the IRI in each member that defines the absolute or relative sequence of ingestion";
+        sh:message      "LR2.3 - an event stream MAY contain a ldes:sequencePath property to indicate the relative or absolute ingest order";
+        sh:minCount     1;
+        sh:name         "LDES sequencePath";
+        sh:path         ldes:sequencePath;
+        sh:severity     sh:Info .
+
+ldes:EventStreamTimestampPathLimitedShape
+        rdf:type        sh:PropertyShape;
+        sh:description  "The path to the xsd:dateTime literal in each member that defines the order of the event stream";
+        sh:maxCount     1;
+        sh:message      "LR2.2 - an event stream MUST NOT include multiple ldes:timestampPath properties";
+        sh:name         "LDES timestampPath";
+        sh:path         ldes:timestampPath;
+        sh:severity     sh:Violation .
+
+ldes:EventStreamTimestampPathSuggestedShape
+        rdf:type        sh:PropertyShape;
+        sh:description  "The path to the xsd:dateTime literal in each member that defines the order of the event stream";
+        sh:message      "LR2.2 - an event stream SHOULD include a ldes:timestampPath property to indicate the timestamp (xsd:dateTime) when the member was added (i.e. ingested) to the collection";
+        sh:minCount     1;
+        sh:name         "LDES timestampPath";
+        sh:path         ldes:timestampPath;
+        sh:severity     sh:Warning .
+
+ldes:CollectionTypeSpecifiedShape
+        rdf:type        sh:PropertyShape;
+        sh:description  "A shape to validate that an ldes:EventStream is not double-typed with its base class tree:Collection .";
+        sh:hasValue     tree:Collection;
+        sh:message      "LR2.1 - an event stream SHOULD NOT be double typed with tree:Collection";
+        sh:name         "LDES double-typed";
+        sh:path         rdf:type .
+
+ldes:EventStreamDoubleTypeShape
+        rdf:type        sh:NodeShape;
+        rdfs:comment    "A shape verifying that an ldes:EventStream is not double-typed in an LDES page."@en;
+        rdfs:label      "EventStream class shape"@en;
+        sh:not          ldes:CollectionTypeSpecifiedShape;
+        sh:severity     sh:Warning;
+        sh:targetClass  ldes:EventStream .
+
+ldes:EventStreamTypeRequiredShape
+        rdf:type        sh:PropertyShape;
+        sh:description  "A shape to validate that an ldes:EventStream only appears once in a LDES page.";
+        sh:maxCount     1;
+        sh:message      "LR2.1 - an event stream MUST be a ldes:EventStream";
+        sh:minCount     1;
+        sh:name         "LDES count";
+        sh:path         [ sh:inversePath  rdf:type ] .
+
+ldes:EventStreamTypeShape
+        rdf:type       sh:NodeShape;
+        rdfs:comment   "A shape ensuring that an ldes:EventStream appears only once in a well-formed LDES page."@en;
+        rdfs:label     "EventStream shape"@en;
+        sh:property    ldes:EventStreamTypeRequiredShape;
+        sh:targetNode  ldes:EventStream .
+
+tree:CollectionTypeRequiredShape
+        sh:deactivated  true .
+
+ldes:TreeViewObjectShape
+        rdf:type            sh:NodeShape;
+        rdfs:comment        "A shape describing well-formed LDES views."@en;
+        rdfs:label          "View shape"@en;
+        sh:property         ldes:RetentionPolicyInvalidShape;
+        sh:targetObjectsOf  tree:view .
+
+ldes:EventStreamClassShape
+        rdf:type        sh:NodeShape;
+        rdfs:comment    "A shape describing well-formed LDES collections."@en;
+        rdfs:label      "EventStream class shape"@en;
+        sh:property     ldes:EventStreamMemberNodeKindShape , ldes:EventStreamShapeRecommendedShape , ldes:EventStreamVersionSequencePathLimitedShape , ldes:EventStreamVersionSequencePathSuggestedShape , ldes:EventStreamVersionTimestampPathLimitedShape , ldes:EventStreamVersionTimestampPathSuggestedShape , ldes:EventStreamVersionOfPathLimitedShape , ldes:EventStreamVersionOfPathSuggestedShape , ldes:EventStreamSequencePathLimitedShape , ldes:EventStreamSequencePathSuggestedShape , ldes:EventStreamTimestampPathLimitedShape , ldes:EventStreamTimestampPathSuggestedShape;
+        sh:targetClass  ldes:EventStream .
+
+ldes:   owl:imports  ldes:Vocabulary .

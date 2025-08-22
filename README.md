@@ -9,7 +9,7 @@ It is built on top of the [TREE Compliance Test Suite](https://github.com/rorlic
 
 The bash shell commands below allow you to retrieve the updated shapes, if needed.
 ```bash
-export TAG=v0.3.0-alpha
+export TAG=v0.4.0-alpha
 export FILE=ldes-shapes.zip
 export RESOURCES=./src/resources/shapes
 

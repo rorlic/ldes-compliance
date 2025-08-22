@@ -11,18 +11,22 @@
     <gitb:actor id="Publisher" role="SUT" />
   </actors>
   <imports>
-    <artifact from="TreeValidationSuite" type="binary" encoding="UTF-8" name="rootNodeTtl">resources/shapes/tree-root-node-shapes.ttl</artifact>
-    <artifact from="TreeValidationSuite" type="binary" encoding="UTF-8" name="subsequentTtl">resources/shapes/tree-subsequent-node-shapes.ttl</artifact>
-    <artifact from="TreeValidationSuite" type="binary" encoding="UTF-8" name="structureTtl">resources/shapes/tree-structure-shapes.ttl</artifact>
-    <artifact type="binary" encoding="UTF-8" name="ldesTtl">resources/shapes/ldes-shapes.ttl</artifact>
+    <artifact from="TreeValidationSuite" type="binary" encoding="UTF-8" name="treeRootNodeTtl">resources/shapes/tree-root-node-shapes.ttl</artifact>
+    <artifact from="TreeValidationSuite" type="binary" encoding="UTF-8" name="treeSubsequentTtl">resources/shapes/tree-subsequent-node-shapes.ttl</artifact>
+    <artifact from="TreeValidationSuite" type="binary" encoding="UTF-8" name="treeStructureTtl">resources/shapes/tree-structure-shapes.ttl</artifact>
+    <artifact type="binary" encoding="UTF-8" name="ldesRootNodeTtl">resources/shapes/ldes-root-node-shapes.ttl</artifact>
+    <artifact type="binary" encoding="UTF-8" name="ldesSubsequentNodeTtl">resources/shapes/ldes-subsequent-node-shapes.ttl</artifact>
   </imports>
   <variables>
     <var name="url" type="string" />
     <var name="turtleContentType" type="string" />
-    <var name="rootNodeShapes" type="map" />
-    <var name="subsequentShapes" type="map" />
-    <var name="structureShapes" type="map" />
-    <var name="ldesShapes" type="map" />
+    
+    <var name="treeRootNodeShapes" type="map" />
+    <var name="treeSubsequentShapes" type="map" />
+    <var name="treeStructureShapes" type="map" />
+    <var name="ldesRootNodeShapes" type="map" />
+    <var name="ldesSubsequentShapes" type="map" />
+
     <var name="rootShapes" type="list[map]" />
     <var name="nodeShapes" type="list[map]" />
     <var name="treeShapes" type="list[map]" />
@@ -31,20 +35,23 @@
     <assign to="url" source="$Publisher{treeRootNodeUrl}"/>
     <assign to="turtleContentType">"text/turtle"</assign>
     
-    <assign to="rootNodeShapes{content}">$rootNodeTtl</assign>
-    <assign to="rootNodeShapes{contentType}">$turtleContentType</assign>
-    <assign to="subsequentShapes{content}">$subsequentTtl</assign>
-    <assign to="subsequentShapes{contentType}">$turtleContentType</assign>
-    <assign to="structureShapes{content}">$structureTtl</assign>
-    <assign to="structureShapes{contentType}">$turtleContentType</assign>
-    <assign to="ldesShapes{content}">$ldesTtl</assign>
-    <assign to="ldesShapes{contentType}">$turtleContentType</assign>
+    <assign to="treeRootNodeShapes{content}">$treeRootNodeTtl</assign>
+    <assign to="treeRootNodeShapes{contentType}">$turtleContentType</assign>
+    <assign to="treeSubsequentShapes{content}">$treeSubsequentTtl</assign>
+    <assign to="treeSubsequentShapes{contentType}">$turtleContentType</assign>
+    <assign to="treeStructureShapes{content}">$treeStructureTtl</assign>
+    <assign to="treeStructureShapes{contentType}">$turtleContentType</assign>
     
-    <assign to="rootShapes" append="true">$rootNodeShapes</assign>
-    <assign to="rootShapes" append="true">$ldesShapes</assign>
-    <assign to="nodeShapes" append="true">$subsequentShapes</assign>
-    <assign to="nodeShapes" append="true">$ldesShapes</assign>
-    <assign to="treeShapes" append="true">$structureShapes</assign>
+    <assign to="ldesRootNodeShapes{content}">$ldesRootNodeTtl</assign>
+    <assign to="ldesRootNodeShapes{contentType}">$turtleContentType</assign>
+    <assign to="ldesSubsequentShapes{content}">$ldesSubsequentNodeTtl</assign>
+    <assign to="ldesSubsequentShapes{contentType}">$turtleContentType</assign>
+    
+    <assign to="rootShapes" append="true">$treeRootNodeShapes</assign>
+    <assign to="rootShapes" append="true">$ldesRootNodeShapes</assign>
+    <assign to="nodeShapes" append="true">$treeSubsequentShapes</assign>
+    <assign to="nodeShapes" append="true">$ldesSubsequentShapes</assign>
+    <assign to="treeShapes" append="true">$treeStructureShapes</assign>
 
     <call path="scriptlets/process-ldes-structure.xml">
       <input name="url">$url</input>

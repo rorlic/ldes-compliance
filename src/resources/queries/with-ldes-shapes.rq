@@ -5,20 +5,9 @@ prefix xsd:  <http://www.w3.org/2001/XMLSchema#>
 
 CONSTRUCT {
   ?s ?p ?o .
-
-  ldes:MemberShape a sh:NodeShape; 
-    sh:targetObjectsOf tree:member ; 
-    sh:property ldes:EventStreamTimestampPathHasDateTimeDataTypeShape .
-  
-  ldes:EventStreamTimestampPathHasDateTimeDataTypeShape a sh:PropertyShape ; 
-    sh:path ?timestampPath ; 
-    sh:datatype xsd:dateTime ;
-    sh:severity sh:Violation;
-    sh:name "LDES timestampPath";
-    sh:description "The path to the xsd:dateTime literal in each member that defines the order of the event stream";
-    sh:message "LPER-07 (ldes:timestampPath usage) - an event stream MAY include a ldes:timestampPath property to specify a property path, which when applied to a member, yields a xsd:dateTime value" .
+  ?memberShape sh:targetObjectsOf tree:member .
 } where {  
   ?s ?p ?o .
   ?es a ldes:EventStream .
-  ?es ldes:timestampPath ?timestampPath .
+  ?es tree:shape ?memberShape .
 }
